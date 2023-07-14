@@ -2,8 +2,15 @@
 
 -- create stored program
 DELIMITER //
-CREATE PROCEDURE ComputeAverageWeightedScoreForUser(IN user_id INT)
+CREATE PROCEDURE ComputeAverageWeightedScoreForUser()
 BEGIN
-	UPDATE users SET average_score = (SELECT SUM(score * weight) / SUM(weight) FROM corrections JOIN projects ON corrections.project_id = projects.id WHERE user_id = user_id) WHERE id = user_id;
+	DECLARE count_user INT DEFAULT 0;
+	DECLARE i INT DEFAULT 0;
+	SET count_user = SELECT COUNT(*) AS total FROM users;
+	SET i = 0;
+	WHILE i < count_user DO
+		UPDATE users SET average_score = (SELECT SUM(score * weight) / SUM(weight) FROM corrections JOIN projects ON corrections.project_id = projects.id);
+		SET i = i + 1;
+	END WHILE;
 END//
 DELIMITER ;
