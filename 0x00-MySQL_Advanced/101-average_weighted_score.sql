@@ -6,7 +6,7 @@ CREATE PROCEDURE ComputeAverageWeightedScoreForUser()
 BEGIN
 	DECLARE count_user INT DEFAULT 0;
 	DECLARE i INT DEFAULT 0;
-	SET count_user = SELECT COUNT(*) AS total FROM users;
+	SELECT COUNT(*) FROM users INTO count_user;
 	SET i = 0;
 	WHILE i < count_user DO
 		UPDATE users SET average_score = (SELECT SUM(score * weight) / SUM(weight) FROM corrections JOIN projects ON corrections.project_id = projects.id);
