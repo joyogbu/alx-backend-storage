@@ -9,7 +9,7 @@ BEGIN
 	SELECT COUNT(*) FROM users INTO count_user;
 	SET i = 0;
 	WHILE i < count_user DO
-		UPDATE users SET average_score = (SELECT SUM(score * weight) / SUM(weight) FROM corrections JOIN projects ON corrections.project_id = projects.id);
+		UPDATE users SET average_score = (SELECT SUM(score * weight) / SUM(weight) FROM corrections JOIN projects ON corrections.project_id = projects.id WHERE user_id = i) WHERE id = i;
 		SET i = i + 1;
 	END WHILE;
 END//
