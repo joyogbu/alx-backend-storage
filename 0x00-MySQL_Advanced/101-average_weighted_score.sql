@@ -2,7 +2,7 @@
 
 -- create stored program
 DELIMITER //
-CREATE PROCEDURE ComputeAverageWeightedScoreForUser()
+CREATE PROCEDURE ComputeAverageWeightedScoreForUsers()
 BEGIN
 	DECLARE count_user INT DEFAULT 0;
 	DECLARE i INT DEFAULT 0;
