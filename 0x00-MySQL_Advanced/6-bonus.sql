@@ -4,11 +4,11 @@
 DELIMITER $$
 CREATE PROCEDURE AddBonus(IN user_id INT, IN project_name VARCHAR(50), IN score INT)
 BEGIN
-	DECLARE my_prod_id INT;
+	DECLARE my_prod_id INT DEFAULT 0;
 	SELECT id INTO my_prod_id FROM projects WHERE name = project_name;
-	IF @my_prod_id = NULL THEN
+	IF @my_prod_id = 0 THEN
 		INSERT INTO projects(name) VALUES(project_name);
 		SET my_prod_id = NEW.id;
 	END IF;
-	INSERT INTO corrections(user_id, project_id, score) VALUES(user_id, proj_id, score);
+	INSERT INTO corrections(user_id, project_id, score) VALUES(user_id, my_prod_id, score);
 END$$

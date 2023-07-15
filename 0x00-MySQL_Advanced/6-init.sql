@@ -37,11 +37,6 @@ SET @project_c = LAST_INSERT_ID();
 
 INSERT INTO projects (name) VALUES ("Python is cool");
 SET @project_py = LAST_INSERT_ID();
-INSERT INTO projects (name) VALUES ("C is fun");
-SET @project_c = LAST_INSERT_ID();
-
-INSERT INTO projects (name) VALUES ("Python is cool");
-SET @project_py = LAST_INSERT_ID();
 
 
 INSERT INTO corrections (user_id, project_id, score) VALUES (@user_bob, @project_c, 80);
