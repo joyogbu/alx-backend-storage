@@ -6,9 +6,10 @@ CREATE PROCEDURE AddBonus(IN user_id INT, IN project_name VARCHAR(50), IN score 
 BEGIN
 	DECLARE my_prod_id INT;
 	SELECT id INTO my_prod_id FROM projects WHERE name = project_name;
-	IF my_prod_id = NULL THEN
+	IF my_prod_id IS NULL THEN
 		INSERT INTO projects(name) VALUES(project_name);
-		SET my_prod_id = NEW.id;
+		SET my_prod_id = LAST_INSERT_ID();
 	END IF;
 	INSERT INTO corrections(user_id, project_id, score) VALUES(user_id, my_prod_id, score);
 END$$
+DELIMITER ;
