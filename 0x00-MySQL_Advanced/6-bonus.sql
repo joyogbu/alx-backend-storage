@@ -2,14 +2,13 @@
 
 -- CREATE a stored procedure
 DELIMITER $$
-CREATE PROCEDURE AddBonus(IN user_id INT, IN project_name INT, IN score INT)
+CREATE PROCEDURE AddBonus(IN user_id INT, IN project_name VARCHAR(50), IN score INT)
 BEGIN
 	DECLARE my_prod_id INT;
-	SELECT id FROM projects WHERE name = project_name INTO my_prod_id;
-	IF my_prod_od == NULL THEN
+	SELECT id INTO my_prod_id FROM projects WHERE name = project_name;
+	IF @my_prod_id = NULL THEN
 		INSERT INTO projects(name) VALUES(project_name);
 		SET my_prod_id = NEW.id;
-	END IF
+	END IF;
 	INSERT INTO corrections(user_id, project_id, score) VALUES(user_id, proj_id, score);
 END$$
-DELIMETER ;
