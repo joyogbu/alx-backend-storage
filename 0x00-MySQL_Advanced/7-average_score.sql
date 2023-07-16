@@ -2,10 +2,10 @@
 
 -- Create a stored program
 DELIMITER $$
-CREATE PROCEDURE ComputeAverageScoreForUser(IN user_id INT)
+CREATE PROCEDURE ComputeAverageScoreForUser(IN userid INT)
 BEGIN
 	-- DECLARE no_record INT;
 	-- SELECT COUNT(*) INTO no_record FROM corrections WHERE user_id = user_id;
-	UPDATE users SET average_score = (SELECT AVG(score) FROM corrections WHERE user_id = user_id) WHERE id = user_id;
-END$$
+	UPDATE users SET average_score = (SELECT AVG(score) FROM corrections WHERE user_id = userid) WHERE id = userid;
+END $$
 DELIMITER ;
