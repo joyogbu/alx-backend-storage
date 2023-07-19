@@ -4,7 +4,7 @@
 
 import uuid
 import redis
-from typing import Any
+from typing import Any, Union
 
 
 class Cache:
@@ -15,7 +15,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    def store(self, data: Any) -> str:
+    def store(self, data: Union[int, float, bytes, str]) -> str:
         '''defining the store function'''
         random_key = uuid.uuid4()
         str_key: str = str(random_key)
