@@ -6,15 +6,14 @@ import uuid
 import redis
 from typing import Any, Union, Optional, Callable
 from functools import wraps
-import wrapt
 
 
 red = redis.Redis()
-@wrapt.decorator
+@decorator
 def count_calls(meth: Callable) -> Callable:
     '''defining the function'''
     @wraps(meth)
-    def create_count(self, *args):
+    def create_count(self, *args, **kwargs):
         '''defining wrapped function'''
         red.incr(self.__qualname__)
         return meth(*args)
