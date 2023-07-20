@@ -33,9 +33,9 @@ def call_history(method: Callable) -> Callable:
         input_key = f"{method_name}:inputs"
         output_key = f"{method_name}:outputs"
         for arg in args:
-            rpush (input_key, str(arg))
-        res = method(*args)
-        rpush (output_key, res)
+            self._redis.rpush (input_key, str(arg))
+        res = method(self, *args)
+        self._redis.rpush (output_key, res)
         return (res)
     return (create_history)
 
@@ -48,6 +48,7 @@ class Cache:
         self._redis.flushdb()
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         '''defining the store function'''
         random_key = uuid.uuid4()
