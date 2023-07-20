@@ -15,7 +15,8 @@ def count_calls(method: Callable) -> Callable:
     @wraps(method)
     def create_count(self, *args, **kwargs):
         '''defining wrapped function'''
-        key = f"self.__class__.__name__:method.__qualname__:calls"
+        # key = f"self.__class__.__name__:method.__qualname__:calls"
+        key = method.__qualname__
         self._redis.incr(key)
         return method(self, *args, **kwargs)
         #return res
@@ -37,15 +38,15 @@ class Cache:
         self._redis.set(str_key, data)
         return (str_key)
 
-    def get(self, key: str, fn: Optional[Callable[[str], str]]) -> str:
+    def get(self, key: str, fn: Optional[Callable[[str], str]] = None) -> bytes:
         '''defining the function'''
-        # if key not in self._redis:
+        if key not in self._redis:
         # if key:
-            # return None
+            return None
         res = self._redis.get(key)
         #res2 = res.decode("utf-8")
         if res is not None:
-            res = res.decode("utf-8")
+            # res = res.decode("utf-8")
             if (fn):
                 res = fn(res)
         return(res)
