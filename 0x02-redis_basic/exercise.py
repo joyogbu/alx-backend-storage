@@ -8,15 +8,17 @@ from typing import Any, Union, Optional, Callable
 from functools import wraps
 
 
-red = redis.Redis()
-#@decorator
+# red = redis.Redis()
+# @decorator
 def count_calls(method: Callable) -> Callable:
     '''defining the function'''
     @wraps(method)
     def create_count(self, *args, **kwargs):
         '''defining wrapped function'''
-        self._redis.incr(self.__qualname__)
-        return method(*args)
+        key = f"self.__class__.__name__:method.__qualname__:calls"
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+        #return res
     return (create_count)
 
 class Cache:
@@ -35,7 +37,7 @@ class Cache:
         self._redis.set(str_key, data)
         return (str_key)
 
-    def get(self, key: str, fn: Optional[Callable]) -> bytes:
+    def get(self, key: str, fn: Optional[Callable[[Any], Any]]) -> bytes:
         '''defining the function'''
         if key not in self._redis:
             return None
