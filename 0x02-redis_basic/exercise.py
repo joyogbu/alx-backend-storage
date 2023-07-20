@@ -9,13 +9,14 @@ from functools import wraps
 
 
 red = redis.Redis()
-def count_calls(meth: Callable) -> Callable:
+@decorator
+def count_calls(method: Callable) -> Callable:
     '''defining the function'''
-    @wraps(meth)
+    @wraps(method)
     def create_count(self, *args, **kwargs):
         '''defining wrapped function'''
         red.incr(self.__qualname__)
-        return meth(*args)
+        return method(*args)
     return (create_count)
 
 class Cache:
