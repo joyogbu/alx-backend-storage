@@ -15,12 +15,29 @@ def count_calls(method: Callable) -> Callable:
     @wraps(method)
     def create_count(self, *args, **kwargs):
         '''defining wrapped function'''
-        # key = f"self.__class__.__name__:method.__qualname__:calls"
+        #key = f"self.__class__.__name__:method.__qualname__:calls"
         key = method.__qualname__
         self._redis.incr(key)
         return method(self, *args, **kwargs)
         #return res
     return (create_count)
+
+def call_history(method: Callable) -> Callable:
+    '''defining the decorator function'''
+    @wraps(method)
+    def create_history(self, *args):
+        '''defining the wrapped functio'''
+        #input_list = []
+        #output_list = []
+        method_name = method.__qualname__
+        input_key = f"{method_name}:inputs"
+        output_key = f"{method_name}:outputs"
+        for arg in args:
+            rpush (input_key, str(arg))
+        res = method(*args)
+        rpush (output_key, res)
+        return (res)
+    return (create_history)
 
 class Cache:
     '''class for cache'''
