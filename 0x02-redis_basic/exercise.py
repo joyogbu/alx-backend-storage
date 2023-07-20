@@ -37,12 +37,19 @@ class Cache:
         self._redis.set(str_key, data)
         return (str_key)
 
-    def get(self, key: str, fn: Optional[Callable[[Any], Any]]) -> bytes:
+    def get(self, key: str, fn: Optional[Callable[[str], str]]) -> str:
         '''defining the function'''
-        if key not in self._redis:
-            return None
+        # if key not in self._redis:
+        # if key:
+            # return None
         res = self._redis.get(key)
-        return (res)
+        #res2 = res.decode("utf-8")
+        if res is not None:
+            res = res.decode("utf-8")
+            if (fn):
+                res = fn(res)
+        return(res)
+        #return None
 
     def get_str(self) -> str:
         '''defining the function'''
