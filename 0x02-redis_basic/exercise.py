@@ -9,7 +9,7 @@ from functools import wraps
 
 
 red = redis.Redis()
-@decorator
+#@decorator
 def count_calls(method: Callable) -> Callable:
     '''defining the function'''
     @wraps(method)
