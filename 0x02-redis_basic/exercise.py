@@ -32,10 +32,11 @@ def call_history(method: Callable) -> Callable:
         method_name = method.__qualname__
         input_key = f"{method_name}:inputs"
         output_key = f"{method_name}:outputs"
-        for arg in args:
-            self._redis.rpush (input_key, str(arg))
+        #for arg in args:
+        #arg2 = arg.encode("utf-8")
+        self._redis.rpush(input_key, str(args))
         res = method(self, *args)
-        self._redis.rpush (output_key, res)
+        self._redis.rpush (output_key, str(res))
         return (res)
     return (create_history)
 
