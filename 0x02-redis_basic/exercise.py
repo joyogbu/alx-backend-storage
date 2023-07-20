@@ -15,7 +15,7 @@ def count_calls(method: Callable) -> Callable:
     @wraps(method)
     def create_count(self, *args, **kwargs):
         '''defining wrapped function'''
-        red.incr(self.__qualname__)
+        self._redis.incr(self.__qualname__)
         return method(*args)
     return (create_count)
 
