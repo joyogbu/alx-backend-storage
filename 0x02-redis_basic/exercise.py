@@ -10,7 +10,7 @@ from functools import wraps
 
 # red = redis.Redis()
 # @decorator
-def count_calls(method: Callable[[Union[str, int, float, bytes]], str]) -> Callable:
+def count_calls(method: Callable) -> Callable:
     '''defining the function'''
     @wraps(method)
     def create_count(self, *args, **kwargs):
@@ -37,7 +37,7 @@ class Cache:
         self._redis.set(str_key, data)
         return (str_key)
 
-    def get(self, key: str, fn: Optional[Callable[[Any], Any]]) -> bytes:
+    def get(self, key: str, fn: Optional[Callable[[Any], Any]] = None) -> bytes:
         '''defining the function'''
         if key not in self._redis:
             return None
