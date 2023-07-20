@@ -10,7 +10,7 @@ from functools import wraps
 
 # red = redis.Redis()
 # @decorator
-def count_calls(method: Callable) -> Callable:
+def count_calls(method: Callable[[Union[str, int, float, bytes]], str]) -> Callable:
     '''defining the function'''
     @wraps(method)
     def create_count(self, *args, **kwargs):
