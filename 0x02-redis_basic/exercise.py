@@ -30,14 +30,14 @@ class Cache:
         self._redis.flushdb()
 
     @count_calls
-    def store(self, data: Union[int, float, bytes, str]) -> str:
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         '''defining the store function'''
         random_key = uuid.uuid4()
         str_key: str = str(random_key)
         self._redis.set(str_key, data)
         return (str_key)
 
-    def get(self, key: str, fn: Optional[Callable[[Any], Any]] = None) -> bytes:
+    def get(self, key: str, fn: Optional[Callable[[Any], Any]]) -> bytes:
         '''defining the function'''
         if key not in self._redis:
             return None
