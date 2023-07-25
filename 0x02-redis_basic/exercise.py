@@ -42,13 +42,13 @@ def call_history(method: Callable) -> Callable:
     return (create_history)
 
 
-def replay(func):
+def replay(self, func=None):
     '''defining the function'''
     my_output = call_history(func)
-    my_inputs = self._redis.lrange(my_output, 0, -1)
+    my_inputs = _redis.lrange(my_output, 0, -1)
     my_keys = func
     for i, o in zip(my_inputs, my_keys):
-        return ("{} -> {}".format(i, o))
+        print("{} -> {}".format(i, o))
 
 
 class Cache:
