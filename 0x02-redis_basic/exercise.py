@@ -15,30 +15,41 @@ def count_calls(method: Callable) -> Callable:
     @wraps(method)
     def create_count(self, *args, **kwargs):
         '''defining wrapped function'''
-        #key = f"self.__class__.__name__:method.__qualname__:calls"
+        # key = f"{method.__qualname__}:{args}:{kwargs}"
         key = method.__qualname__
         self._redis.incr(key)
         return method(self, *args, **kwargs)
-        #return res
+        # return res
     return (create_count)
+
 
 def call_history(method: Callable) -> Callable:
     '''defining the decorator function'''
     @wraps(method)
     def create_history(self, *args):
         '''defining the wrapped functio'''
-        #input_list = []
-        #output_list = []
+        # input_list = []
+        # output_list = []
         method_name = method.__qualname__
         input_key = f"{method_name}:inputs"
         output_key = f"{method_name}:outputs"
-        #for arg in args:
-        #arg2 = arg.encode("utf-8")
+        # for arg in args:
+        # arg2 = arg.encode("utf-8")
         self._redis.rpush(input_key, str(args))
         res = method(self, *args)
-        self._redis.rpush (output_key, str(res))
+        self._redis.rpush(output_key, str(res))
         return (res)
     return (create_history)
+
+
+def replay(func):
+    '''defining the function'''
+    my_output = call_history(func)
+    my_inputs = self._redis.lrange(my_output, 0, -1)
+    my_keys = func
+    for i, o in zip(my_inputs, my_keys):
+        return ("{} -> {}".format(i, o))
+
 
 class Cache:
     '''class for cache'''
@@ -57,19 +68,20 @@ class Cache:
         self._redis.set(str_key, data)
         return (str_key)
 
-    def get(self, key: str, fn: Optional[Callable[[str], str]] = None) -> bytes:
+    def get(self, key: str, fn: Optional[Callable[[str], str]] = None) -> \
+            bytes:
         '''defining the function'''
         if key not in self._redis:
-        # if key:
+            # if key:
             return None
         res = self._redis.get(key)
-        #res2 = res.decode("utf-8")
+        # res2 = res.decode("utf-8")
         if res is not None:
             # res = res.decode("utf-8")
             if (fn):
                 res = fn(res)
         return(res)
-        #return None
+        # return None
 
     def get_str(self) -> str:
         '''defining the function'''
